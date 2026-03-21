@@ -1,60 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchPopularSeries } from '../services/tmdbApi';
 import './pages.css';
 
 const Series = () => {
   const [selectedGenre, setSelectedGenre] = useState('all');
+  const [series, setSeries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const series = [
-    {
-      id: 1,
-      title: 'Action Series 1',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'action',
-      seasons: 3,
-      views: '1.8M',
-    },
-    {
-      id: 2,
-      title: 'Drama Series 2',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'drama',
-      seasons: 5,
-      views: '2.1M',
-    },
-    {
-      id: 3,
-      title: 'Comedy Series 3',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'comedy',
-      seasons: 4,
-      views: '1.5M',
-    },
-    {
-      id: 4,
-      title: 'Mystery Series 4',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'mystery',
-      seasons: 2,
-      views: '1.9M',
-    },
-    {
-      id: 5,
-      title: 'Sci-Fi Series 5',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'scifi',
-      seasons: 3,
-      views: '2.3M',
-    },
-    {
-      id: 6,
-      title: 'Fantasy Series 6',
-      thumbnail: 'https://via.placeholder.com/200x300',
-      genre: 'fantasy',
-      seasons: 4,
-      views: '2.4M',
-    },
-  ];
+  useEffect(() => {
+    const loadSeries = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchPopularSeries();
+        setSeries(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading series:', err);
+        setError('Failed to load series. Please try again later.');
+        setSeries([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSeries();
+  }, []);
 
   const filteredSeries =
     selectedGenre === 'all'
@@ -62,7 +34,15 @@ const Series = () => {
       : series.filter(s => s.genre === selectedGenre);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20 px-6">
+    <div className="min-h-screen text-white pt-20 px-6" style={{
+      backgroundImage: 'url("https://images.unsplash.com/photo-1550745165-9491bb59b1bb?w=1200&h=800&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      position: 'relative'
+    }}>
+      <div className="absolute inset-0 bg-black/70" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}></div>
+      <div style={{position: 'relative', zIndex: 1}}>
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">Series</h1>
 
@@ -139,33 +119,46 @@ const Series = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSeries.map(s => (
-            <Link
-              key={s.id}
-              to={`/watch/${s.id}`}
-              className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition cursor-pointer"
-            >
-              <div className="relative">
-                <img
-                  src={s.thumbnail}
-                  alt={s.title}
-                  className="w-full h-48 object-cover"
-                />
-                <span className="absolute top-2 right-2 bg-red-600 px-3 py-1 rounded text-sm font-semibold">
-                  {s.seasons} seasons
-                </span>
-              </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-96">
+            <div className="text-xl text-gray-400">Loading series...</div>
+          </div>
+        ) : error ? (
+          <div className="bg-red-900 text-red-100 p-4 rounded-lg mb-6">
+            {error}
+          </div>
+        ) : series.length === 0 ? (
+          <div className="text-center text-gray-400">No series found.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredSeries.map(s => (
+              <Link
+                key={s.id}
+                to={`/watch/${s.id}`}
+                className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition cursor-pointer"
+              >
+                <div className="relative">
+                  <img
+                    src={s.thumbnail}
+                    alt={s.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <span className="absolute top-2 right-2 bg-red-600 px-3 py-1 rounded text-sm font-semibold">
+                    {s.seasons} seasons
+                  </span>
+                </div>
 
-              <div className="p-4">
-                <h3 className="font-semibold text-lg line-clamp-2 mb-2">
-                  {s.title}
-                </h3>
-                <p className="text-gray-400 text-sm">{s.views} views</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-lg line-clamp-2 mb-2">
+                    {s.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm">{s.views} popularity</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
       </div>
     </div>
   );

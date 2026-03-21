@@ -32,7 +32,15 @@ const Watchlist = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20 px-6">
+    <div className="min-h-screen text-white pt-20 px-6" style={{
+      backgroundImage: 'url("https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=1200&h=800&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      position: 'relative'
+    }}>
+      <div className="absolute inset-0 bg-black/70" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}></div>
+      <div style={{position: 'relative', zIndex: 1}}>
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">My Watchlist</h1>
 
@@ -89,6 +97,7 @@ const Watchlist = () => {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

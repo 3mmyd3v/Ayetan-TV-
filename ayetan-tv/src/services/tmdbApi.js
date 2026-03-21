@@ -1,6 +1,6 @@
 // TMDB API Configuration
 const API_BASE_URL = 'https://api.themoviedb.org/3';
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY; // You'll need to add this to your .env file
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY; // You'll need to add this to your .env file
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 // Helper function to build URLs

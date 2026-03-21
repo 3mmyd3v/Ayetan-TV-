@@ -1,40 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { searchContent } from '../services/tmdbApi';
 import './pages.css';
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searched, setSearched] = useState(false);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    // Mock search results
-    if (searchQuery.trim()) {
-      setResults([
-        {
-          id: 1,
-          title: `Result for "${searchQuery}" 1`,
-          thumbnail: 'https://via.placeholder.com/200x120',
-          views: '1.2M',
-        },
-        {
-          id: 2,
-          title: `Result for "${searchQuery}" 2`,
-          thumbnail: 'https://via.placeholder.com/200x120',
-          views: '856K',
-        },
-        {
-          id: 3,
-          title: `Result for "${searchQuery}" 3`,
-          thumbnail: 'https://via.placeholder.com/200x120',
-          views: '2.3M',
-        },
-      ]);
+    if (!searchQuery.trim()) {
+      setResults([]);
+      setSearched(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      setSearched(true);
+      const data = await searchContent(searchQuery);
+      setResults(data);
+    } catch (err) {
+      console.error('Error searching:', err);
+      setError('Failed to search. Please try again later.');
+      setResults([]);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20 px-6">
+    <div className="min-h-screen text-white pt-20 px-6" style={{
+      backgroundImage: 'url("https://images.unsplash.com/photo-1514306688772-e93a4a1b5c7f?w=1200&h=800&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      position: 'relative'
+    }}>
+      <div className="absolute inset-0 bg-black/70" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}></div>
+      <div style={{position: 'relative', zIndex: 1}}>
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">Search Videos</h1>
 
@@ -56,7 +64,15 @@ const Search = () => {
           </div>
         </form>
 
-        {results.length > 0 && (
+        {loading ? (
+          <div className="flex justify-center items-center h-96">
+            <div className="text-xl text-gray-400">Searching...</div>
+          </div>
+        ) : error ? (
+          <div className="bg-red-900 text-red-100 p-4 rounded-lg mb-6">
+            {error}
+          </div>
+        ) : searched && results.length > 0 ? (
           <div>
             <h2 className="text-2xl font-semibold mb-6">
               Results for "{searchQuery}"
@@ -77,25 +93,22 @@ const Search = () => {
                     <h3 className="font-semibold text-sm line-clamp-2 mb-1">
                       {item.title}
                     </h3>
-                    <p className="text-gray-400 text-xs">{item.views} views</p>
+                    <p className="text-gray-400 text-xs">⭐ {item.rating?.toFixed(1) || 'N/A'}</p>
                   </div>
                 </Link>
               ))}
             </div>
           </div>
-        )}
-
-        {searchQuery && results.length === 0 && (
+        ) : searched && results.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-400 text-lg">No results found</p>
           </div>
-        )}
-
-        {!searchQuery && (
+        ) : (
           <div className="text-center py-12">
             <p className="text-gray-400 text-lg">Start typing to search...</p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
