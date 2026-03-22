@@ -1,0 +1,16 @@
+{
+  "name": "ayetan-tv-full-stack",
+  "version": "1.0.0",
+  "description": "Ayetan TV - Full Stack Application",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install-all": "npm install && cd ayetan-tv && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"cd ayetan-tv && npm run dev\" \"cd backend && npm run dev\"",
+    "build": "cd ayetan-tv && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

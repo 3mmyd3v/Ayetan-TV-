@@ -1,0 +1,25 @@
+{
+  "buildCommand": "cd ayetan-tv && npm install && npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install && cd backend && npm install",
+  "framework": "vite",
+  "outputDirectory": "ayetan-tv/dist",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "env": [
+    "VITE_API_BASE_URL",
+    "VITE_TMDB_API_KEY",
+    "MONGODB_URI",
+    "JWT_SECRET",
+    "CORS_ORIGIN",
+    "NODE_ENV"
+  ]
+}
