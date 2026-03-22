@@ -44,7 +44,7 @@ Add these in **Settings → Environment Variables**:
 #### Frontend Variables:
 
 ```
-VITE_API_BASE_URL=https://your-deployment.vercel.app/api
+VITE_API_BASE_URL=  
 VITE_TMDB_API_KEY=your_tmdb_api_key
 ```
 

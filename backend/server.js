@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import movieRoutes from './routes/movieRoutes.js';
 import seriesRoutes from './routes/seriesRoutes.js';
 import watchlistRoutes from './routes/watchlistRoutes.js';
+import contentRoutes from './routes/contentRoutes.js';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/series', seriesRoutes);
 app.use('/api/watchlist', watchlistRoutes);
+app.use('/api/content', contentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

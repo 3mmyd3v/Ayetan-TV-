@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ayetan-tv-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://your-frontend-url.vercel.app
+      - key: NODE_ENV
+        value: production
