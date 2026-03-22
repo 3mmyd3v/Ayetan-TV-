@@ -1,13 +1,13 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { connectDB } from './config/db.js';
-import { errorHandler } from './middleware/errorHandler.js';
-import authRoutes from './routes/authRoutes.js';
-import movieRoutes from './routes/movieRoutes.js';
-import seriesRoutes from './routes/seriesRoutes.js';
-import watchlistRoutes from './routes/watchlistRoutes.js';
-import contentRoutes from './routes/contentRoutes.js';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { connectDB } from "./config/db.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import authRoutes from "./routes/authRoutes.js";
+import movieRoutes from "./routes/movieRoutes.js";
+import seriesRoutes from "./routes/seriesRoutes.js";
+import watchlistRoutes from "./routes/watchlistRoutes.js";
+import contentRoutes from "./routes/contentRoutes.js";
 
 dotenv.config();
 
@@ -22,15 +22,15 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/movies', movieRoutes);
-app.use('/api/series', seriesRoutes);
-app.use('/api/watchlist', watchlistRoutes);
-app.use('/api/content', contentRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/movies", movieRoutes);
+app.use("/api/series", seriesRoutes);
+app.use("/api/watchlist", watchlistRoutes);
+app.use("/api/content", contentRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
-  res.json({ message: 'Server is running' });
+app.get("/health", (req, res) => {
+  res.json({ message: "Server is running" });
 });
 
 // Error handling middleware

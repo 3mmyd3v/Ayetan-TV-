@@ -1,8 +1,9 @@
 # Complete Deployment Guide - Ayetan TV
 
 Deploy your full-stack application with:
+
 - **Frontend**: React/Vite on Vercel
-- **Backend**: Express on Render  
+- **Backend**: Express on Render
 - **Database**: MongoDB Atlas
 
 ## Quick Setup
@@ -16,16 +17,19 @@ Follow [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) to deploy backend to Render.
 ### 2. Frontend (Vercel)
 
 1. Create `.env.production` in `ayetan-tv/` folder:
+
    ```env
    VITE_API_BASE_URL=https://your-backend.onrender.com
    ```
 
 2. In `ayetan-tv/` folder, run:
+
    ```bash
    npm run build
    ```
 
 3. Deploy to Vercel:
+
    ```bash
    npm i -g vercel
    vercel --prod
@@ -40,6 +44,7 @@ Follow [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) to deploy backend to Render.
 ### 3. Verify Everything Works
 
 Test the full flow:
+
 1. Visit your Vercel frontend URL
 2. Try to log in or browse movies (this calls your Render backend)
 3. Check browser console for any errors
@@ -72,6 +77,7 @@ RENDER_DEPLOYMENT.md          ← Detailed backend setup
 ## Environment Variables Summary
 
 ### Backend (Render Dashboard)
+
 ```
 MONGODB_URI          = your_mongodb_uri
 JWT_SECRET           = your_secret
@@ -81,6 +87,7 @@ NODE_ENV             = production
 ```
 
 ### Frontend (Vercel Dashboard)
+
 ```
 VITE_API_BASE_URL    = https://your-render-backend.onrender.com
 ```
@@ -106,6 +113,7 @@ VITE_API_BASE_URL    = https://your-render-backend.onrender.com
 Before deploying, test locally:
 
 **Backend (.env):**
+
 ```env
 MONGODB_URI=mongodb://localhost:27017/ayetan-tv
 JWT_SECRET=test_secret
@@ -115,16 +123,18 @@ NODE_ENV=development
 ```
 
 **Frontend (.env.local):**
+
 ```env
 VITE_API_BASE_URL=http://localhost:5000
 ```
 
 **Start both:**
+
 ```bash
 # Terminal 1
 cd backend && npm run dev
 
-# Terminal 2  
+# Terminal 2
 cd ayetan-tv && npm run dev
 ```
 
@@ -137,6 +147,7 @@ cd ayetan-tv && npm run dev
 ## Your Deployed URLs
 
 Once deployed:
+
 - Frontend: `https://your-app.vercel.app`
 - Backend: `https://your-backend.onrender.com`
 - API Health: `https://your-backend.onrender.com/health`

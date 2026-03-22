@@ -1,14 +1,14 @@
-import express from 'express';
-import axios from 'axios';
+import express from "express";
+import axios from "axios";
 
 const router = express.Router();
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 // Error handling
 const handleError = (res, error) => {
-  console.error('TMDB API Error:', error.message);
+  console.error("TMDB API Error:", error.message);
   res.status(error.response?.status || 500).json({
     error: error.message,
     details: error.response?.data,
@@ -16,12 +16,12 @@ const handleError = (res, error) => {
 };
 
 // Get trending movies
-router.get('/trending/movies', async (req, res) => {
+router.get("/trending/movies", async (req, res) => {
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/trending/movie/week`, {
       params: { api_key: TMDB_API_KEY },
     });
-    const movies = response.data.results.map(movie => ({
+    const movies = response.data.results.map((movie) => ({
       id: movie.id,
       title: movie.title,
       thumbnail: `${IMAGE_BASE_URL}${movie.poster_path}`,
@@ -36,12 +36,12 @@ router.get('/trending/movies', async (req, res) => {
 });
 
 // Get trending series
-router.get('/trending/series', async (req, res) => {
+router.get("/trending/series", async (req, res) => {
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/trending/tv/week`, {
       params: { api_key: TMDB_API_KEY },
     });
-    const series = response.data.results.map(show => ({
+    const series = response.data.results.map((show) => ({
       id: show.id,
       title: show.name,
       thumbnail: `${IMAGE_BASE_URL}${show.poster_path}`,
@@ -56,11 +56,11 @@ router.get('/trending/series', async (req, res) => {
 });
 
 // Search movies
-router.get('/search/movies', async (req, res) => {
+router.get("/search/movies", async (req, res) => {
   try {
     const { query, page = 1 } = req.query;
     if (!query) {
-      return res.status(400).json({ error: 'Search query is required' });
+      return res.status(400).json({ error: "Search query is required" });
     }
     const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
       params: {
@@ -69,7 +69,7 @@ router.get('/search/movies', async (req, res) => {
         page,
       },
     });
-    const movies = response.data.results.map(movie => ({
+    const movies = response.data.results.map((movie) => ({
       id: movie.id,
       title: movie.title,
       thumbnail: `${IMAGE_BASE_URL}${movie.poster_path}`,
@@ -83,11 +83,11 @@ router.get('/search/movies', async (req, res) => {
 });
 
 // Search series
-router.get('/search/series', async (req, res) => {
+router.get("/search/series", async (req, res) => {
   try {
     const { query, page = 1 } = req.query;
     if (!query) {
-      return res.status(400).json({ error: 'Search query is required' });
+      return res.status(400).json({ error: "Search query is required" });
     }
     const response = await axios.get(`${TMDB_BASE_URL}/search/tv`, {
       params: {
@@ -96,7 +96,7 @@ router.get('/search/series', async (req, res) => {
         page,
       },
     });
-    const series = response.data.results.map(show => ({
+    const series = response.data.results.map((show) => ({
       id: show.id,
       title: show.name,
       thumbnail: `${IMAGE_BASE_URL}${show.poster_path}`,
@@ -110,7 +110,7 @@ router.get('/search/series', async (req, res) => {
 });
 
 // Get movie details
-router.get('/movies/:id', async (req, res) => {
+router.get("/movies/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const response = await axios.get(`${TMDB_BASE_URL}/movie/${id}`, {
@@ -134,7 +134,7 @@ router.get('/movies/:id', async (req, res) => {
 });
 
 // Get series details
-router.get('/series/:id', async (req, res) => {
+router.get("/series/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const response = await axios.get(`${TMDB_BASE_URL}/tv/${id}`, {

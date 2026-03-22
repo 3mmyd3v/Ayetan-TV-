@@ -57,6 +57,7 @@ git push origin main
 
 5. Click **Create Web Service**
 6. Go to **Environment** tab and add these variables:
+
    ```
    MONGODB_URI = your_connection_string
    JWT_SECRET = your_secret
@@ -84,12 +85,13 @@ VITE_API_BASE_URL=https://your-backend.onrender.com
 ```
 
 The frontend will now call:
+
 - `https://your-backend.onrender.com/api/auth` → For authentication
 - `https://your-backend.onrender.com/api/content/trending/movies` → For trending movies
 - `https://your-backend.onrender.com/api/content/search/movies` → For movie search
 - etc.
 
-### 5. Update Backend `.env` 
+### 5. Update Backend `.env`
 
 The backend `.env` should have:
 
@@ -117,12 +119,16 @@ GET  /api/content/series/:id             → Series details
 ### Example Frontend Usage
 
 **Before (TMDB key exposed in frontend):**
+
 ```javascript
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`);
+const response = await fetch(
+  `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`,
+);
 ```
 
 **After (Secure backend proxy):**
+
 ```javascript
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const response = await fetch(`${API_URL}/content/trending/movies`);
@@ -131,6 +137,7 @@ const response = await fetch(`${API_URL}/content/trending/movies`);
 ## Monitoring & Troubleshooting
 
 ### Check Render Logs
+
 1. Go to your Render service
 2. Click **Logs** tab
 3. Check for any errors
@@ -138,19 +145,23 @@ const response = await fetch(`${API_URL}/content/trending/movies`);
 ### Common Issues
 
 #### "Cannot GET /api"
+
 - Ensure Root Directory is set to `backend` in Render settings
 - Check that all routes are properly mounted in `server.js`
 
 #### CORS Errors
+
 - Verify `CORS_ORIGIN` environment variable matches your frontend URL exactly
 - Check that CORS middleware is configured correctly
 
 #### MongoDB Connection Failed
+
 - Test connection string locally first
 - Add Render's IP to MongoDB Atlas whitelist (0.0.0.0/0 or specific IPs)
 - Verify credentials in connection string
 
 #### TMDB API Errors
+
 - Verify `TMDB_API_KEY` is correct
 - Check TMDB API status
 - Ensure API key has required permissions
@@ -158,12 +169,14 @@ const response = await fetch(`${API_URL}/content/trending/movies`);
 ### Health Check
 
 Test your backend:
+
 ```bash
 curl https://your-backend.onrender.com/health
 # Should return: {"message":"Server is running"}
 ```
 
 Test TMDB proxy:
+
 ```bash
 curl https://your-backend.onrender.com/api/content/trending/movies
 ```
@@ -173,6 +186,7 @@ curl https://your-backend.onrender.com/api/content/trending/movies
 ### Setup Local Environment
 
 1. Backend `.env` (backend/.env):
+
 ```env
 MONGODB_URI=mongodb://localhost:27017/ayetan-tv
 JWT_SECRET=your_local_secret
@@ -182,11 +196,13 @@ NODE_ENV=development
 ```
 
 2. Frontend `.env.local` (ayetan-tv/.env.local):
+
 ```env
 VITE_API_BASE_URL=http://localhost:5000
 ```
 
 3. Start both services:
+
 ```bash
 # Terminal 1: Backend
 cd backend
@@ -202,6 +218,7 @@ npm run dev
 ## Security Notes
 
 ✅ **Advantages of backend proxy:**
+
 - TMDB API key never exposed to frontend
 - Requests are rate-limited at backend level
 - Better control over data transformation
@@ -209,11 +226,11 @@ npm run dev
 
 ## Summary
 
-| Component | Service | URL |
-|-----------|---------|-----|
-| Frontend | Vercel | https://your-app.vercel.app |
-| Backend | Render | https://your-backend.onrender.com |
-| Database | MongoDB Atlas | mongodb+srv://... |
-| TMDB API | Proxied through backend | /api/content/* |
+| Component | Service                 | URL                               |
+| --------- | ----------------------- | --------------------------------- |
+| Frontend  | Vercel                  | https://your-app.vercel.app       |
+| Backend   | Render                  | https://your-backend.onrender.com |
+| Database  | MongoDB Atlas           | mongodb+srv://...                 |
+| TMDB API  | Proxied through backend | /api/content/\*                   |
 
 Your API keys and sensitive data are now securely stored on your backend servers!
